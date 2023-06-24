@@ -3,22 +3,28 @@ import path from 'path';
 import matter from 'gray-matter';
 import Link from 'next/link';
 
-export default function Blogs() {
+export default async function Blogs() {
   // contentディレクトリ内のマークダウンファイル一覧を取得
   const postsDirectory = path.join(process.cwd(), 'content');
   const fileNames = fs.readdirSync(postsDirectory);
 
-  // ファイルの中身を取得
-  const posts = fileNames.map((fileName) => {
-    const filePath = path.join(postsDirectory, fileName);
-    const fileContents = fs.readFileSync(filePath, 'utf8');
-    const { data } = matter(fileContents);
+  // 各ファイルの中身を取得
+  const posts = await Promise.all(
+    fileNames.map(async (fileName) => {
+      const filePath = path.join(postsDirectory, fileName);
+      const fileContents = fs.readFileSync(filePath, 'utf8');
+      const { data } = matter(fileContents);
 
-    return {
-      slug: fileName.replace('.md', ''),
-      frontmatter: data,
-    };
-  });
+      // slugとfrontmatter(title, date, description)を取得
+      return {
+        slug: fileName.replace('.md', ''),
+        frontmatter: data,
+      };
+    })
+  ).then((posts) =>
+    // 最新日付順に並び替え
+    posts.sort((a, b) => new Date(b.frontmatter.date) - new Date(a.frontmatter.date))
+  );
 
   return (
     <div className="bg-white py-24 sm:py-32">
@@ -32,17 +38,24 @@ export default function Blogs() {
                 className="flex max-w-xl flex-col items-start justify-between"
               >
                 <div className="group relative">
+                  {/* 日付を表示 */}
                   <div class="flex items-center gap-x-4 text-xs">
                     <div class="text-gray-500">{post.frontmatter.date}</div>
                   </div>
-                  <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
+                  {/* 記事タイトル・リンク */}
+                  <h3 className="mt-3 text-lg font-semibold leading-6 text-blue-700 group-hover:text-blue-400">
                     <Link
                       href={`/blog/${post.slug}`}
-                      className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600"
+                      className="mt-3 text-lg font-semibold leading-6 text-blue-700 group-hover:text-blue-400"
                     >
                       {post.frontmatter.title}
                     </Link>
                   </h3>
+                  {/* 記事説明文を表示 */}
+                  <p
+                    className="mt-5 line-clamp-3 text-sm leading-6 text-gray-600"
+                    dangerouslySetInnerHTML={{ __html: `${post.frontmatter.description}` }}
+                  ></p>
                 </div>
               </article>
             ))}
