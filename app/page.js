@@ -32,6 +32,9 @@ export default function Blogs() {
                 className="flex max-w-xl flex-col items-start justify-between"
               >
                 <div className="group relative">
+                  <div class="flex items-center gap-x-4 text-xs">
+                    <div class="text-gray-500">{post.frontmatter.date}</div>
+                  </div>
                   <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
                     <Link
                       href={`/blog/${post.slug}`}
