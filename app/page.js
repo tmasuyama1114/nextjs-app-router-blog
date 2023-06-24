@@ -21,15 +21,43 @@ export default function Blogs() {
   });
 
   return (
-    <div>
-      <h1>My Blog</h1>
-      <ul>
-        {posts.map((post) => (
-          <li key={post.slug}>
-            <Link href={`/blog/${post.slug}`}>{post.frontmatter.title}</Link>
-          </li>
-        ))}
-      </ul>
+    //     <div class="bg-white px-6 py-24 sm:py-32 lg:px-8">
+    //   <div class="mx-auto max-w-2xl text-center">
+    //     <p class="text-base font-semibold leading-7 text-indigo-600">Get the help you need</p>
+    //     <h2 class="mt-2 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">Support center</h2>
+    //     <p class="mt-6 text-lg leading-8 text-gray-600">Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat fugiat aliqua.</p>
+    //   </div>
+    // </div>
+    <div className="bg-white py-24 sm:py-32">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        <div className="mx-auto max-w-2xl">
+          <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+            From the blog
+          </h2>
+          <p className="mt-2 text-lg leading-8 text-gray-600">
+            Learn how to grow your business with our expert advice.
+          </p>
+          <div className="mt-10 space-y-16 border-t border-gray-200 pt-10 sm:mt-16 sm:pt-16">
+            {posts.map((post) => (
+              <article
+                key={post.slug}
+                className="flex max-w-xl flex-col items-start justify-between"
+              >
+                <div className="group relative">
+                  <h3 className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600">
+                    <Link
+                      href={`/blog/${post.slug}`}
+                      className="mt-3 text-lg font-semibold leading-6 text-gray-900 group-hover:text-gray-600"
+                    >
+                      {post.frontmatter.title}
+                    </Link>
+                  </h3>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

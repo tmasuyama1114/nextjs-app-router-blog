@@ -7,10 +7,6 @@ import remarkHtml from 'remark-html';
 
 // ブログ記事ページ
 export default async function BlogPost({ params }) {
-  // contentディレクトリ内のマークダウンファイル一覧を取得
-  const postsDirectory = path.join(process.cwd(), 'content');
-  const fileNames = fs.readdirSync(postsDirectory);
-
   // URLのパラメータから該当するファイル名を取得 (今回は hello-world)
   const { slug } = params;
   const filePath = path.join(process.cwd(), 'content', `${slug}.md`);
